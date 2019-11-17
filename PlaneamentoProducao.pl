@@ -1,4 +1,4 @@
-%Fï¿½BRICA
+%FÁBRICA
 
 % Linhas
 
@@ -24,12 +24,12 @@ tipos_maq_linha(lA,[ma]).
 % ...
 
 
-% Operaï¿½ï¿½es
+% Operações
 
 tipo_operacoes([opt1,opt2,opt3,opt4,opt5]).
 
 
-% Afetaï¿½ï¿½o de tipos de operaï¿½ï¿½es a tipos de mï¿½quinas
+% Afetação de tipos de operações a tipos de máquinas
 % com ferramentas, tempos de setup e tempos de execucao)
 
 operacao_maquina(opt1,ma,fa,5,60).
@@ -91,7 +91,7 @@ encomenda(clB,[e(pA,1,110),e(pB,1,150),e(pC,1,300)]).
 
 
 
-/* ########### MELHOR ESCALONAMENTOS DOS TEMPOS DE OCUPAï¿½AO ####################*/
+/* ########### MELHOR ESCALONAMENTOS DOS TEMPOS DE OCUPAÇAO ####################*/
 :- dynamic melhor_sol_to/2.
 melhor_escalonamento1(M,Lm,Tm):-(melhor_escalonamento11(M);true),
 				retract(melhor_sol_to(Lm,Tm)).
@@ -103,7 +103,7 @@ atualiza(LP,T):-melhor_sol_to(_,Tm),
 				T<Tm,
                                 retract(melhor_sol_to(_,_)),
                                 asserta(melhor_sol_to(LP,T)),!.
-% permuta/2 gera permutaï¿½ï¿½es de listas
+% permuta/2 gera permutações de listas
 permuta([ ],[ ]).
 permuta(L,[X|L1]):-
   apaga1(X,L,Li),
@@ -111,7 +111,7 @@ permuta(L,[X|L1]):-
 apaga1(X,[X|L],L).
 apaga1(X,[Y|L],[Y|L1]):-
   apaga1(X,L,L1).
-% permuta_tempo/3 faz uma permutaï¿½ï¿½o das operaï¿½ï¿½es atribuï¿½das a uma maquina e calcula tempo de ocupaï¿½ï¿½o incluindo trocas de ferramentas
+% permuta_tempo/3 faz uma permutação das operações atribuídas a uma maquina e calcula tempo de ocupação incluindo trocas de ferramentas
 permuta_tempo(M,LP,Tempo):- operacoes_atrib_maq(M,L),
 				permuta(L,LP),
 				soma_tempos(semfer,M,LP,Tempo).
@@ -131,9 +131,9 @@ soma_tempos(Fer,M,[Op|LOp],Tempo):- classif_operacoes(Op,Opt),
 
 
 
-/* ############### HEURISTICA TEMPO DE OCUPAï¿½AO ########################*/
-/* h_m_tempo_ocupacao/3 Heurï¿½stica que minimiza o tempo de ocupaï¿½ï¿½o das operaï¿½ï¿½es de uma mï¿½quina M.
-Coloca lista de operaï¿½ï¿½es e tempo de ocupaï¿½ï¿½o em Lm e Tm respetivamente*/
+/* ############### HEURISTICA TEMPO DE OCUPAÇAO ########################*/
+/* h_m_tempo_ocupacao/3 Heurística que minimiza o tempo de ocupação das operações de uma máquina M.
+Coloca lista de operações e tempo de ocupação em Lm e Tm respetivamente*/
 h_m_tempo_ocupacao(M,Lm,Tm):-operacoes_atrib_maq(M,LOp),
                 h_m_tempo_ocupacao1(M,LOp,Lm,Tm,sem_ferramenta),
                 soma_tempos(sem_ferramenta,M,Lm,Tm),!.
@@ -162,7 +162,7 @@ get_op_ideal(M,[H|LOp],F,Op):-classif_operacoes(H,Opt),
 
 
 
-/* ############# A STAR TEMPO DE OCUPAï¿½AO ###############*/
+/* ############# A STAR TEMPO DE OCUPAÇAO ###############*/
 aStar(M,Cam,Custo):-findall(Opt,operacao_maquina(Opt,M,_,_,_),[Ltratados|Lfaltam]),
 				operacao_maquina(Ltratados,_,_,CustoSet,CustoX),
 				aStar2([(_,CustoSet+CustoX,[Ltratados],Lfaltam)],Cam,Custo).
@@ -214,12 +214,12 @@ melhor_escalonamento11_atraso(Cliente):- asserta(melhor_sol_to_atraso(_,10000)),
 atualiza_atraso(LP,T):-melhor_sol_to_atraso(_,Tm),
 				T<Tm,retract(melhor_sol_to_atraso(_,_))
                                 ,asserta(melhor_sol_to_atraso(LP,T)),!.
-% permuta/2 gera permutaï¿½ï¿½es de listas
+% permuta/2 gera permutações de listas
 permuta_atraso([ ],[ ]).
 permuta_atraso(L,[X|L1]):-apaga1_atraso(X,L,Li),permuta_atraso(Li,L1).
 apaga1_atraso(X,[X|L],L).
 apaga1_atraso(X,[Y|L],[Y|L1]):-apaga1_atraso(X,L,L1).
-% permuta_tempo/3 faz uma permutaï¿½ï¿½o das operaï¿½ï¿½es atribuï¿½das a uma maquina e calcula tempo de ocupaï¿½ï¿½o incluindo trocas de ferramentas
+% permuta_tempo/3 faz uma permutação das operações atribuídas a uma maquina e calcula tempo de ocupação incluindo trocas de ferramentas
 permuta_tempo_atraso(Cliente,LP,Tempo):- encomenda(Cliente,Lista),
 			   permuta_atraso(Lista,LP),
                            soma_tempos_atraso(semfer,LP,Cliente,Tempo,_),
@@ -246,14 +246,14 @@ soma_tempos_atraso(Fer,[e(Prod,_,_)|OutrasE],Client,TempoAtraso,TempoTotal):-
 
 
 /* ###################### HEURISTICA TEMPO DE ATRASO ###########################*/
-/* h_m_tempo_atraso_edd/3. Heurï¿½stica de minimizaï¿½ï¿½o do tempo de atraso usando EDD (Early-due-date).
+/* h_m_tempo_atraso_edd/3. Heurística de minimização do tempo de atraso usando EDD (Early-due-date).
 Dado o cliente devolve a lista de encomendas ordenadas por tempo de conclusao tal como o a sua soma de tempos de atraso. */
 h_m_tempo_atraso_edd(Cliente,Lm,Tm):-
 %findall que procura todas as encomendas do cliente no formato e(Produto,Quantidade,TempoConclusao)
 				findall(e(Prod,Qtd,TConc)
                                        ,op_prod_client(_,_,_,Prod,Cliente,Qtd,TConc,_,_),
                                         Todos),
-                                %ordena lista Todos, pelo o seu 4ï¿½ elemento(TConc),
+                                %ordena lista Todos, pelo o seu 4º elemento(TConc),
                                 sort(3,@=<,Todos,Lm),
                                 soma_tempos_atraso1(semfer,Lm,Cliente,Tm,_).
 soma_tempos_atraso1(_,[],_,0,0).
@@ -282,14 +282,14 @@ soma_tempos_atraso1(Fer,[e(Prod,_,_)|OutrasE],Client,TempoAtraso,TempoTotal):-
 
 /* ########################################## A STAR TEMPO DE ATRASO ###############################################################################*/
 
-/* aStar_atraso/3 . Define ordem de realizacao de operacoes de forma a minimizar tempo de atraso usando o mï¿½todo aStar */
+/* aStar_atraso/3 . Define ordem de realizacao de operacoes de forma a minimizar tempo de atraso usando o método aStar */
 aStar_atraso(Cliente,Cam,Custo):-%vai buscar todas as operacoes das encomendas do cliente
 				findall(Op,op_prod_client(Op,_,_,_,Cliente,_,_,_,_),Lfaltam),
 				%predicado auxiliar que agora recebe cliente e TempoTotal (iniciado a 0)
 				aStar2_atraso(Cliente,[(_,0,0,[],Lfaltam)],Cam,Custo).
 /* criterio de paragem e quando o Lfaltam for vazia, colocamos no Cam o Ltratados na ordem correta*/
 aStar2_atraso(_,[(_,Custo,_,Ltratados,[])|_],Cam,Custo):-reverse(Ltratados,Cam),!.
-/* Predicado usado na primeira vez, ou seja quando o Ttotal ï¿½ 0. Necessario pois aqui nao existe Operacao atual*/
+/* Predicado usado na primeira vez, ou seja quando o Ttotal é 0. Necessario pois aqui nao existe Operacao atual*/
 aStar2_atraso(Cliente,[(_,Ca,0,Ltratados,Lfaltam)|Outros],Cam,Custo):-findall((CEX,CaX,TtotalX,[X|Ltratados],Lfaltam2),
              (op_prod_client(X,_,F,_,Cliente,Qt,TConc,CustoSet,CustoX),
              member(X,Lfaltam),soma_CaX_atraso(none,X,Ca,CustoSet,CustoX,TConc,Qt,0,CaX,TtotalX),
@@ -312,16 +312,16 @@ aStar2_atraso(Cliente,[(_,Ca,Ttotal,Ltratados,Lfaltam)|Outros],Cam,Custo):-
   sort(Todos,TodosOrd),
   aStar2_atraso(Cliente,TodosOrd,Cam,Custo).
 /*soma_CaX_atraso/10 faz a conta para obtermos o novo valor de CaX */
-/* Usado quando nao existe operacao anterior, ou seja na primeira iteraï¿½ï¿½o,soma se sempre o Custo de setup*/
+/* Usado quando nao existe operacao anterior, ou seja na primeira iteração,soma se sempre o Custo de setup*/
 soma_CaX_atraso(none,_,Ca,CustoSet,CustoX,TConc,Qt,Ttotal,CaX,TtotalX):-
 				TtotalX is CustoX*Qt+CustoSet+Ttotal,
 				(TtotalX>TConc,!,CaX is TtotalX-TConc+Ca;CaX is Ca).
 soma_CaX_atraso(Act,X,Ca,CustoSet,CustoX,TConc,Qt,Ttotal,CaX,TtotalX):-classif_operacoes(Act,OptAct),classif_operacoes(X,Opt),
 				(OptAct==Opt,TtotalX is CustoX*Qt+Ca;
 				TtotalX is CustoX*Qt+CustoSet+Ttotal),
-				%verifica se o Ttotal ï¿½ maior que o tempo de conclusï¿½o da encomenda, caso seja, soma-se o tempo de atraso ao Ca
+				%verifica se o Ttotal é maior que o tempo de conclusão da encomenda, caso seja, soma-se o tempo de atraso ao Ca
 				(TtotalX>TConc,!,CaX is TtotalX-TConc+Ca;CaX is Ca).
-/*estimativa_atraso/5 faz a estimativa em relaï¿½ï¿½o a tempo de atraso, somando o atraso de todas as operacoes restantes caso fossem realizadas no mesmo instante */
+/*estimativa_atraso/5 faz a estimativa em relação a tempo de atraso, somando o atraso de todas as operacoes restantes caso fossem realizadas no mesmo instante */
 estimativa_atraso(_,_,[],_,0):-!.
 estimativa_atraso(F,Cliente,[Op|Lop],Ttotal,Estimativa):-estimativa_atraso(F,Cliente,Lop,Ttotal,Estimativa1),
 				op_prod_client(Op,_,Fer,_,Cliente,Qt,TConc,Tsetup,Texec),
@@ -337,4 +337,4 @@ estimativa_atraso(F,Cliente,[Op|Lop],Ttotal,Estimativa):-estimativa_atraso(F,Cli
 
 root_handler(_):-
         format('Content-Type: text/html~n~n', []),
-                format('Hello from G088: ~w',[]).
+                format('Hello from G088: ~w', []).
