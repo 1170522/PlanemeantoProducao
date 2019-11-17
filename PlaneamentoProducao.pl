@@ -333,7 +333,7 @@ estimativa_atraso(F,Cliente,[Op|Lop],Ttotal,Estimativa):-estimativa_atraso(F,Cli
 :- use_module(library(http/http_dispatch)).
 
 :- http_handler(/, root_handler, []).
-:- http_handler('/db', db, []).
+
 
 root_handler(_):-
         format('Content-Type: text/html~n~n', []),
