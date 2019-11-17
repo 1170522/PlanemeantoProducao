@@ -337,4 +337,4 @@ estimativa_atraso(F,Cliente,[Op|Lop],Ttotal,Estimativa):-estimativa_atraso(F,Cli
 
 root_handler(_):-
         format('Content-Type: text/html~n~n', []),
-                format('Hello from G088: ~w', []).
+                format('Hello from G088', []).
